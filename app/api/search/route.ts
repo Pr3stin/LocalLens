@@ -4,7 +4,6 @@ import { getPlaces } from "@/lib/places";
 export async function POST(req: Request) {
   const { query } = await req.json();
 
-  // Step 1: Construct prompt for Ollama
   const prompt = `
   You are a parser. Extract structured data from this user query:
 
@@ -19,7 +18,6 @@ export async function POST(req: Request) {
   }
   `;
 
-  // Step 2: Call Ollama (streaming response)
   const response = await fetch("http://localhost:11434/api/generate", {
     method: "POST",
     headers: {
@@ -32,7 +30,6 @@ export async function POST(req: Request) {
     })
   });
 
-  // Collect full streamed text
   const reader = response.body!.getReader();
   let fullText = "";
 
@@ -41,7 +38,7 @@ export async function POST(req: Request) {
     if (done) break;
 
     const chunk = new TextDecoder().decode(value);
-    // Ollama streams JSON lines – parse each one
+  
     const lines = chunk.split("\n").filter(Boolean);
 
     for (const line of lines) {
@@ -49,14 +46,14 @@ export async function POST(req: Request) {
         const json = JSON.parse(line);
         if (json.response) fullText += json.response;
       } catch {
-        // ignore partial JSON lines
+        
       }
     }
   }
 
   fullText = fullText.trim();
 
-  // Step 3: Parse the model’s JSON output
+  
   let parsed: any;
   try {
     parsed = JSON.parse(fullText);
@@ -71,7 +68,7 @@ export async function POST(req: Request) {
     };
   }
 
-  // Step 4: Fetch Google Places results
+  
   const results = await getPlaces({
     location: parsed.location || "Detroit",
     keyword: parsed.category || "activities",
