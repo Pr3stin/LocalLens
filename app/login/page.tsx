@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // <-- import this
+import { useRouter } from "next/navigation"; 
 import { motion } from "framer-motion";
 import { Mail, Lock, Eye, EyeOff, Loader2, LogIn, UserPlus, Chrome } from "lucide-react";
 import {
@@ -33,7 +33,7 @@ export default function LoginPage() {
         await signInWithEmailAndPassword(auth, email, password);
       }
 
-      // <-- redirect to main page after login/signup
+      
       router.push("/"); 
     } catch (err: any) {
       setErrorMsg(err.message);
@@ -50,7 +50,7 @@ export default function LoginPage() {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
 
-      // <-- redirect after Google login
+      
       router.push("/");
     } catch (err: any) {
       setErrorMsg(err.message);

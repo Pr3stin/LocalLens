@@ -14,13 +14,13 @@ export default function AuthGuard({ children }: AuthGuardProps) {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Redirect only if not logged in and not on /login
+    
     if (!loading && !user && pathname !== "/login") {
       router.push("/login");
     }
   }, [user, loading, pathname, router]);
 
-  // Show loading only on protected pages
+  
   if (loading && pathname !== "/login") {
     return (
       <div className="min-h-screen flex items-center justify-center text-white">
@@ -29,6 +29,6 @@ export default function AuthGuard({ children }: AuthGuardProps) {
     );
   }
 
-  // Always render children on /login
+  
   return <>{children}</>;
 }
